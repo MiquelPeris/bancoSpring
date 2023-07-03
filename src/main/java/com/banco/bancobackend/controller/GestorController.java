@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.banco.bancobackend.model.Gestor;
@@ -40,8 +41,19 @@ public class GestorController {
 		
 	}
 	
-	@DeleteMapping()
-	public deleteGestor(Gestor gestor) {
-		return this.gestorService.guardarGestor(gestor);
+	@DeleteMapping(path = "/{id}")
+	public void borrarGestor(@PathVariable("id") Integer id) {
+		this.gestorService.borrarGestorPorId(id);
 		}
+	
+	@GetMapping(path = "/correo/{email}") 
+		public Optional<Gestor> obtenerGestor(@PathVariable("email")String email){
+			return this.gestorService.buscarPorCorreo(email);
+		}
+	
+	@GetMapping(path = "/login")
+	public Optional<Gestor> loguearGestor(@RequestParam("email") String email, @RequestParam("password") String password) {
+		return this.gestorService.buscarGestorPorCorreoYPass(email, password);
+	}
+	
 }

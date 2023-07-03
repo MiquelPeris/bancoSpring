@@ -1,11 +1,13 @@
 package com.banco.bancobackend.model;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Gestor {
+public class Cliente {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,11 +16,12 @@ public class Gestor {
 	private String usuario;
 	private String correo;
 	private String password;
+	@ManyToOne
+	private Gestor gestor;
+	private double saldo;
 	
-	public Gestor() {
+	public Cliente() {
 		
-
-	
 	}
 
 	public Integer getId() {
@@ -52,8 +55,23 @@ public class Gestor {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
 
+	public double getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+
+	public Gestor getGestor() {
+		return gestor;
+	}
+
+	public void setGestor(Gestor gestor) {
+		this.gestor = gestor;
+	}
+	
+	
+	
 }
