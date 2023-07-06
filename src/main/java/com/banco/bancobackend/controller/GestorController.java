@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,8 @@ import com.banco.bancobackend.service.GestorService;
 @RestController
 //  En desarrollo https://localhost: 8080/gestor
 @RequestMapping("/gestor")
+@CrossOrigin(origins= "http://localhost:4200")
+
 public class GestorController {
 
 	@Autowired
@@ -51,9 +55,27 @@ public class GestorController {
 			return this.gestorService.buscarPorCorreo(email);
 		}
 	
-	@GetMapping(path = "/login")
-	public Optional<Gestor> loguearGestor(@RequestParam("email") String email, @RequestParam("password") String password) {
-		return this.gestorService.buscarGestorPorCorreoYPass(email, password);
+//	@GetMapping(path = "/login")
+//	public Optional<Gestor> loguearGestor(@RequestParam("email") String email, @RequestParam("password") String password) {
+//		return this.gestorService.buscarGestorPorCorreoYPass(email, password);
+//	}
+	
+	@PostMapping("/login")
+	// retornar una ResponseEntity en lugar de solo el gestor nos permite gestionar
+	// los códigos de respuesta
+	public ResponseEntity<Gestor> login(@RequestBody Gestor gestor) {
+		Optional<Gestor> optGestor = gestorService.buscarGestorPorCorreoYPass(gestor.getCorreo(), gestor.getPassword());
+		if (optGestor.isPresent()) {
+			// responde con 200 OK
+			return ResponseEntity.ok(optGestor.get());
+		} else {
+			// responde con 401 UNAUTHORIZED
+			// NOTA: en este caso recibiremos un error 401 en el front si el login no es correcto
+			// no recibiremos null, tendremos que tenerlo en cuenta
+			return ResponseEntity.status(401).build();
+		}
+		
 	}
+	
 	
 }

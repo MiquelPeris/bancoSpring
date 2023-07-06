@@ -1,6 +1,7 @@
 package com.banco.bancobackend.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.banco.bancobackend.model.Cliente;
+
 import com.banco.bancobackend.repository.ClienteRepository;
 
 @Service
@@ -39,6 +41,19 @@ public class ClienteService {
 		return this.clienteRepository.save(cliente);
 	}
 	
+	private String obtenerPasswordActual(Cliente cliente) {
+		Cliente clienteGuardado = leerClientePorId(cliente.getId()).orElse(null);
+		if(clienteGuardado != null) {
+			return clienteGuardado.getPassword();
+		} return null;
+	}
+	
+	public Cliente guardarClienteSinActualizarPassword(Cliente cliente) {
+		String passwordGuardada = obtenerPasswordActual(cliente);
+		cliente.setPassword(passwordGuardada);
+		return this.clienteRepository.save(cliente);
+	}
+	
 	public void borrarClientePorId(Integer id) {
 		this.clienteRepository.deleteById(id);
 	}
@@ -57,6 +72,10 @@ public class ClienteService {
 			}
 		}
 		return null;
+	}
+	
+	public List<Cliente> buscarPorIdGestor(Integer id){
+		return this.clienteRepository.findByGestorId(id);
 	}
 
 }

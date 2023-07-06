@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,8 @@ import com.banco.bancobackend.service.MensajeService;
 @RestController
 //En desarrollo https://localhost: 8080/mensaje
 @RequestMapping("/mensaje")
+@CrossOrigin(origins= "http://localhost:4200")
+
 public class MensajeController {
 
 	@Autowired
